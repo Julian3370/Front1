@@ -1,22 +1,12 @@
 import React from 'react';
-import logo from '../assets/logo.png';
+import NavBar from '../components/NavBar';
+import './MainLayout.css';
 
 const MainLayout = ({ children }) => {
   return (
     <div>
-      <header>
-        <img src={logo} alt="Logo" />
-        <h1>My App</h1>
-        <nav>
-          <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/dataset">Dataset</a></li>
-            <li><a href="/tasks">Tasks</a></li>
-          </ul>
-        </nav>
-      </header>
+      <NavBar />
       <main>{children}</main>
-      <footer>Footer content</footer>
     </div>
   );
 };

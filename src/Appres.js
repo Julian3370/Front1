@@ -1,35 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { Pagination, Row, Col, Image } from 'react-bootstrap';
 import axios from 'axios';
+//import './ImageGallery.css';
 
 const ImageGallery = () => {
   const [images, setImages] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [imagesPerPage] = useState(10);
+  const imagesPerPage = 10;
 
   useEffect(() => {
     const fetchImages = async () => {
-      const imageNames = Array.from({ length: 30 }, (_, i) => `${i + 1}.jpg`);
-      setImages(imageNames);
+      try {
+        const response = await axios.get('/api/images');  // Asegúrate de que esta URL es correcta y tu backend está sirviendo los datos
+        setImages(response.data);
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
     };
 
     fetchImages();
   }, []);
 
-  // Get current images
   const indexOfLastImage = currentPage * imagesPerPage;
   const indexOfFirstImage = indexOfLastImage - imagesPerPage;
   const currentImages = images.slice(indexOfFirstImage, indexOfLastImage);
 
-  // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div>
+    <div className="image-gallery">
       <Row>
         {currentImages.map((image, index) => (
           <Col key={index} sm={6} md={4} lg={3} className="mb-4">
-            <Image src={process.env.PUBLIC_URL + `/images/${image}`} thumbnail />
+            <Image
+              src={image}
+              thumbnail
+              className="gallery-image"
+              alt={`Imagen ${index + 1}`}
+              onError={(e) => console.log('Error cargando imagen:', e.target.src)}  // Debug
+            />
           </Col>
         ))}
       </Row>
@@ -42,6 +51,6 @@ const ImageGallery = () => {
       </Pagination>
     </div>
   );
-}
+};
 
 export default ImageGallery;
